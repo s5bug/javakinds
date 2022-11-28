@@ -15,6 +15,7 @@ java {
 
 tasks.withType(JavaCompile).each {
     it.options.compilerArgs.add('--enable-preview')
+    it.options.compilerArgs.add('-Xlint:unchecked')
 }
 tasks.withType(JavaExec).each {
     it.jvmArgs.add('--enable-preview')

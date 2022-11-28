@@ -2,18 +2,19 @@ package tf.bug.data;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
-import tf.bug.App〇〇入;
-import tf.bug.Kind〇〇入;
-import tf.bug.K〇〇入;
+import tf.bug.App;
+import tf.bug.IsKind;
 import tf.bug.cats.Monad;
+import tf.bug.〇;
+import tf.bug.入;
 
-public sealed interface Option<A> extends App〇〇入<Option.Mu, A> permits Option.None, Option.Some {
+public sealed interface Option<A> extends App<Option.Mu, A> permits Option.None, Option.Some {
 
-    public static <A> Option<A> unbox(App〇〇入<Option.Mu, A> proofBox) {
+    public static <A> Option<A> unbox(App<Option.Mu, A> proofBox) {
         return (Option<A>) proofBox;
     }
 
-    public static final class Mu implements K〇〇入 {}
+    public static final class Mu implements 入<〇, 〇> {}
 
     public <B> B fold(Supplier<B> none, Function<A, B> some);
 
@@ -54,33 +55,33 @@ public sealed interface Option<A> extends App〇〇入<Option.Mu, A> permits Opt
         }
     }
 
-    public static enum Instance implements Kind〇〇入<Mu, Instance.Mu>, Monad<Mu, Instance.Mu> {
+    public static enum Instance implements IsKind<入<〇, 〇>, Mu, Instance.Mu>, Monad<Mu, Instance.Mu> {
         INSTANCE;
 
-        public static final class Mu implements Kind〇〇入.Mu, Monad.Mu {}
+        public static final class Mu implements IsKind.Mu<入<〇, 〇>>, Monad.Mu {}
 
         @Override
-        public <A> App〇〇入<Option.Mu, A> pure(A value) {
+        public <A> App<Option.Mu, A> pure(final A value) {
             return new Option.Some<>(value);
         }
 
         @Override
-        public <A> App〇〇入<Option.Mu, A> flatten(App〇〇入<Option.Mu, App〇〇入<Option.Mu, A>> ffa) {
+        public <A> App<Option.Mu, A> flatten(final App<Option.Mu, App<Option.Mu, A>> ffa) {
             return Option.unbox(ffa).fold(None::new, Option::unbox);
         }
 
         @Override
-        public <A, B> App〇〇入<Option.Mu, B> map(App〇〇入<Option.Mu, A> fa, Function<A, B> f) {
+        public <A, B> App<Option.Mu, B> map(final App<Option.Mu, A> fa, final Function<A, B> f) {
             return Option.unbox(fa).map(f);
         }
 
         @Override
-        public <A, B> App〇〇入<Option.Mu, B> flatMap(App〇〇入<Option.Mu, A> fa, Function<A, App〇〇入<Option.Mu, B>> f) {
+        public <A, B> App<Option.Mu, B> flatMap(final App<Option.Mu, A> fa, final Function<A, App<Option.Mu, B>> f) {
             return Option.unbox(fa).flatMap(f.andThen(Option::unbox));
         }
 
         @Override
-        public <A, B> App〇〇入<Option.Mu, B> tailRecM(A a, Function<A, App〇〇入<Option.Mu, Either<A, B>>> f) {
+        public <A, B> App<Option.Mu, B> tailRecM(final A a, final Function<A, App<Option.Mu, Either<A, B>>> f) {
             Either<A, B> current = new Either.Left<>(a);
             while(current instanceof Either.Left<A, B> el) {
                 Option<Either<A, B>> r = Option.unbox(f.apply(el.get()));

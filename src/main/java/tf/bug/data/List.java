@@ -1,18 +1,19 @@
 package tf.bug.data;
 
 import java.util.function.Function;
-import tf.bug.App〇〇入;
-import tf.bug.Kind〇〇入;
-import tf.bug.K〇〇入;
+import tf.bug.App;
+import tf.bug.IsKind;
 import tf.bug.cats.Monad;
+import tf.bug.〇;
+import tf.bug.入;
 
-public sealed interface List<A> extends App〇〇入<List.Mu, A> permits List.Nil, List.Cons {
+public sealed interface List<A> extends App<List.Mu, A> permits List.Nil, List.Cons {
 
-    public static <A> List<A> unbox(App〇〇入<List.Mu, A> proofBox) {
+    public static <A> List<A> unbox(App<List.Mu, A> proofBox) {
         return (List<A>) proofBox;
     }
 
-    public static final class Mu implements K〇〇入 {}
+    public static final class Mu implements 入<〇, 〇> {}
 
     public <B> List<B> map(Function<A, B> f);
 
@@ -30,28 +31,28 @@ public sealed interface List<A> extends App〇〇入<List.Mu, A> permits List.Ni
         }
     }
 
-    public static enum Instance implements Kind〇〇入<Mu, Instance.Mu>, Monad<Mu, Instance.Mu> {
+    public static enum Instance implements IsKind<入<〇, 〇>, Mu, Instance.Mu>, Monad<Mu, Instance.Mu> {
         INSTANCE;
 
-        public static final class Mu implements Kind〇〇入.Mu, Monad.Mu {}
+        public static final class Mu implements IsKind.Mu<入<〇, 〇>>, Monad.Mu {}
 
         @Override
-        public <A> App〇〇入<List.Mu, A> pure(A a) {
+        public <A> App<List.Mu, A> pure(final A a) {
             return new List.Cons<>(a, new List.Nil<>());
         }
 
         @Override
-        public <A, B> App〇〇入<List.Mu, B> map(App〇〇入<List.Mu, A> fa, Function<A, B> f) {
+        public <A, B> App<List.Mu, B> map(final App<List.Mu, A> fa, final Function<A, B> f) {
             return List.unbox(fa).map(f);
         }
 
         @Override
-        public <A, B> App〇〇入<List.Mu, B> flatMap(App〇〇入<List.Mu, A> fa, Function<A, App〇〇入<List.Mu, B>> f) {
+        public <A, B> App<List.Mu, B> flatMap(final App<List.Mu, A> fa, final Function<A, App<List.Mu, B>> f) {
             return null;
         }
 
         @Override
-        public <A, B> App〇〇入<List.Mu, B> tailRecM(A a, Function<A, App〇〇入<List.Mu, Either<A, B>>> f) {
+        public <A, B> App<List.Mu, B> tailRecM(final A a, final Function<A, App<List.Mu, Either<A, B>>> f) {
             return null;
         }
     }
