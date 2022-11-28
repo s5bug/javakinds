@@ -13,20 +13,20 @@ public sealed interface List<A> extends App<List.Mu, A> permits List.Nil, List.C
         return (List<A>) proofBox;
     }
 
-    public static final class Mu implements 入<〇, 〇> {}
+    public static final record Mu() implements 入<〇, 〇> {}
 
-    public <B> List<B> map(Function<A, B> f);
+    public <B> List<B> map(final Function<A, B> f);
 
     public static final record Nil<A>() implements List<A> {
         @Override
-        public <B> Nil<B> map(Function<A, B> f) {
+        public <B> Nil<B> map(final Function<A, B> f) {
             return new Nil<>();
         }
     }
 
     public static final record Cons<A>(A head, List<A> tail) implements List<A> {
         @Override
-        public <B> Cons<B> map(Function<A, B> f) {
+        public <B> Cons<B> map(final Function<A, B> f) {
             return new Cons<>(f.apply(head), tail.map(f));
         }
     }
@@ -34,7 +34,7 @@ public sealed interface List<A> extends App<List.Mu, A> permits List.Nil, List.C
     public static enum Instance implements IsKind<入<〇, 〇>, Mu, Instance.Mu>, Monad<Mu, Instance.Mu> {
         INSTANCE;
 
-        public static final class Mu implements IsKind.Mu<入<〇, 〇>>, Monad.Mu {}
+        public static final record Mu() implements IsKind.Mu<入<〇, 〇>>, Monad.Mu {}
 
         @Override
         public <A> App<List.Mu, A> pure(final A a) {

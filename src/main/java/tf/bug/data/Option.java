@@ -14,43 +14,43 @@ public sealed interface Option<A> extends App<Option.Mu, A> permits Option.None,
         return (Option<A>) proofBox;
     }
 
-    public static final class Mu implements 入<〇, 〇> {}
+    public static final record Mu() implements 入<〇, 〇> {}
 
-    public <B> B fold(Supplier<B> none, Function<A, B> some);
+    public <B> B fold(final Supplier<B> none, final Function<A, B> some);
 
-    public <B> Option<B> map(Function<A, B> f);
+    public <B> Option<B> map(final Function<A, B> f);
 
-    public <B> Option<B> flatMap(Function<A, Option<B>> f);
+    public <B> Option<B> flatMap(final Function<A, Option<B>> f);
 
     public static final record None<A>() implements Option<A> {
         @Override
-        public <B> B fold(Supplier<B> none, Function<A, B> some) {
+        public <B> B fold(final Supplier<B> none, final Function<A, B> some) {
             return none.get();
         }
 
         @Override
-        public <B> None<B> map(Function<A, B> f) {
+        public <B> None<B> map(final Function<A, B> f) {
             return new None<>();
         }
 
         @Override
-        public <B> None<B> flatMap(Function<A, Option<B>> f) {
+        public <B> None<B> flatMap(final Function<A, Option<B>> f) {
             return new None<>();
         }
     }
     public static final record Some<A>(A get) implements Option<A> {
         @Override
-        public <B> B fold(Supplier<B> none, Function<A, B> some) {
+        public <B> B fold(final Supplier<B> none, final Function<A, B> some) {
             return some.apply(get);
         }
 
         @Override
-        public <B> Some<B> map(Function<A, B> f) {
+        public <B> Some<B> map(final Function<A, B> f) {
             return new Some<>(f.apply(get));
         }
 
         @Override
-        public <B> Option<B> flatMap(Function<A, Option<B>> f) {
+        public <B> Option<B> flatMap(final Function<A, Option<B>> f) {
             return f.apply(get);
         }
     }
@@ -58,7 +58,7 @@ public sealed interface Option<A> extends App<Option.Mu, A> permits Option.None,
     public static enum Instance implements IsKind<入<〇, 〇>, Mu, Instance.Mu>, Monad<Mu, Instance.Mu> {
         INSTANCE;
 
-        public static final class Mu implements IsKind.Mu<入<〇, 〇>>, Monad.Mu {}
+        public static final record Mu() implements IsKind.Mu<入<〇, 〇>>, Monad.Mu {}
 
         @Override
         public <A> App<Option.Mu, A> pure(final A value) {

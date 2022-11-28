@@ -50,7 +50,7 @@ public interface Functor<F extends 入<〇, 〇>, Mu extends Functor.Mu> extends
         return this.map(cond, x -> (x ? ifT : ifF).get());
     }
 
-    public static <F extends 入<〇, 〇>, FMu extends Functor.Mu, G extends 入<〇, 〇>, GMu extends Functor.Mu> Functor<AndThen.Mu<F, G>, AndThen.Instance.Mu<F, G>> andThen(final Functor<F, FMu> fFunctor, final Functor<G, GMu> gFunctor) {
+    public static <F extends 入<〇, 〇>, FMu extends Functor.Mu, G extends 入<〇, 〇>, GMu extends Functor.Mu> Functor<AndThen.Mu<F, G>, AndThen.Instance.Mu<F, FMu, G, GMu>> andThen(final Functor<F, FMu> fFunctor, final Functor<G, GMu> gFunctor) {
         return new AndThen.Instance<>(fFunctor, gFunctor);
     }
 
@@ -63,9 +63,9 @@ public interface Functor<F extends 入<〇, 〇>, Mu extends Functor.Mu> extends
 
         public static final class Mu<F extends 入<〇, 〇>, G extends 入<〇, 〇>> implements 入<〇, 〇> {}
 
-        public static final record Instance<F extends 入<〇, 〇>, FMu extends Functor.Mu, G extends 入<〇, 〇>, GMu extends Functor.Mu>(Functor<F, FMu> fFunctor, Functor<G, GMu> gFunctor) implements Functor<Mu<F, G>, Instance.Mu<F, G>> {
+        public static final record Instance<F extends 入<〇, 〇>, FMu extends Functor.Mu, G extends 入<〇, 〇>, GMu extends Functor.Mu>(Functor<F, FMu> fFunctor, Functor<G, GMu> gFunctor) implements Functor<Mu<F, G>, Instance.Mu<F, FMu, G, GMu>> {
 
-            public static final class Mu<F extends 入<〇, 〇>, G extends 入<〇, 〇>> implements IsKind.Mu<入<〇, 〇>>, Functor.Mu {}
+            public static final class Mu<F extends 入<〇, 〇>, FMu extends Functor.Mu, G extends 入<〇, 〇>, GMu extends Functor.Mu> implements IsKind.Mu<入<〇, 〇>>, Functor.Mu {}
 
             @Override
             public <A, B> App<AndThen.Mu<F, G>, B> map(App<AndThen.Mu<F, G>, A> fa, Function<A, B> f) {
